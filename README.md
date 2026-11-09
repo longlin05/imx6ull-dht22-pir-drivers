@@ -46,6 +46,7 @@ drivers/pir_gpio/      PIR 字符设备 + Makefile
 dts/                   设备树改造：厂商 DTB、追加的节点片段、可复现的构建脚本
 test/                  板上测试脚本
 docs/                  调查记录与测试记录
+docs/blog/             系列文章「i.MX6ULL 驱动笔记」（b00 概览、b01 设备树 + platform driver）
 ```
 
 ## 3. 设备树：为什么不是"改源码里的 dts"
