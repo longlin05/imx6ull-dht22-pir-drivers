@@ -1,7 +1,7 @@
 # i.MX6ULL 驱动笔记（01）：把 `insmod` 的 gpio_num 换成设备树
 
 > 系列目录：[00 这个系列写什么](https://blog.csdn.net/longlin101/article/details/170550740)
-> 前置：[09 i.MX6ULL 驱动：DHT22 IIO + PIR 字符设备](https://blog.csdn.net/longlin101)（单总线时序、交叉编译、模块加载）
+> 前置：[09 i.MX6ULL 驱动：DHT22 IIO + PIR 字符设备](https://blog.csdn.net/longlin101/article/details/170347113)（单总线时序、交叉编译、模块加载）
 > 代码：[imx6ull-dht22-pir-drivers](https://github.com/longlin05/imx6ull-dht22-pir-drivers)
 > 已发布：https://blog.csdn.net/longlin101/article/details/170550878
 
