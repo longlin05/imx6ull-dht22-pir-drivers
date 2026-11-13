@@ -35,17 +35,11 @@ B01 把 insmod 的 gpio_num 换成设备树
     https://blog.csdn.net/longlin101/article/details/170550878
 B02 PIR 为什么不该做成字符设备——换成 input 子系统
     https://blog.csdn.net/longlin101/article/details/170741777
+B03 从手动 insmod 到开机自动加载——以及它暴露的引脚冲突
+    https://blog.csdn.net/longlin101/article/details/170742009
 
 前置（A 系列 09）
     https://blog.csdn.net/longlin101/article/details/170347113
-```
-
-## 已写完待发布
-
-```text
-B03 从手动 insmod 到开机自动加载——以及它暴露的引脚冲突
-    docs/blog/b03-auto-load-and-pin-conflict.md
-    配图 img/b03-boot-timeline.png（发布时手动上传）
 ```
 
 ## 待写

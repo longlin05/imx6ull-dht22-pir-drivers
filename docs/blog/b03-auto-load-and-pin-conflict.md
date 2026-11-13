@@ -4,6 +4,7 @@
 > 上一篇：[02 PIR 为什么不该做成字符设备——换成 input 子系统](https://blog.csdn.net/longlin101/article/details/170741777)
 > 代码：[imx6ull-dht22-pir-drivers](https://github.com/longlin05/imx6ull-dht22-pir-drivers)
 > 前置：[09 i.MX6ULL 驱动：DHT22 IIO + PIR 字符设备](https://blog.csdn.net/longlin101/article/details/170347113)
+> 已发布：https://blog.csdn.net/longlin101/article/details/170742009
 
 ---
 

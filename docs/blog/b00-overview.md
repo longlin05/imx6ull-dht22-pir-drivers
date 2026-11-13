@@ -57,7 +57,7 @@ PIR 模块没有滤波电容也没有下拉电阻，输出会自己抖；正文�
 01 设备树 + platform driver               已发布
 02 PIR 改 input 子系统                     已发布（https://blog.csdn.net/longlin101/article/details/170741777）
    （原计划是 IIO buffer，摸底发现这颗内核没编 CONFIG_IIO_BUFFER）
-03 开机自动加载（/etc/modules + depmod）    已写，待发布
+03 开机自动加载（/etc/modules + depmod）    已发布（https://blog.csdn.net/longlin101/article/details/170742009）
    （原计划是 Buildroot 集成，摸底发现 rootfs 是 Yocto、没有包管理器）
 04 可选：DHT22 的 hwmon 兼容 / 错误计数     计划
 ```
