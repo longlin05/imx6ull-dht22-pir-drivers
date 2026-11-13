@@ -216,3 +216,80 @@ dmesg 无 warn / oops
 没有做"未加载驱动时 /dev/input/event2 不存在"这类反向检查
 KEY_PROG1 只是自定按键，没有接任何用户态程序做端到端联动
 ```
+
+---
+
+# 附二：开机自动加载（v0.4，2026-11-13）
+
+## 做法
+
+这块板子的 rootfs 是 Yocto（`Freescale i.MX Release Distro 4.1.15-2.1.0`），
+init 是 sysvinit，没有 systemd、没有包管理器，但有：
+
+```text
+/etc/init.d/modutils.sh   开机读 /etc/modules，对每一行跑 modprobe
+/sbin/depmod /sbin/modprobe
+/lib/modules/4.1.15-g3dc0a4b/modules.dep
+```
+
+所以走它原生那条路：
+
+```bash
+mkdir -p /lib/modules/$(uname -r)/extra
+cp dht22_iio.ko pir_input.ko /lib/modules/$(uname -r)/extra/
+depmod -a
+printf '# i.MX6ULL 传感器驱动
+dht22_iio
+pir_input
+' > /etc/modules
+```
+
+Makefile 里补了 `install` 目标（走内核的 `modules_install`，
+交叉编译时用 `INSTALL_MOD_PATH=` 指定 staged rootfs）。
+
+## 重启后
+
+```text
+[    5.583432] dht22 dht22: probed, from device tree
+[    5.624236] input: pir as /devices/platform/pir/input/input3
+[    5.661232] pir-input pir: probed, irq=38, key=148, from device tree
+
+in_temp_input = 20000          （20.0 °C）
+/proc/bus/input/devices: Name="pir" Handlers=kbd event2
+```
+
+不用再手动 `insmod`。
+
+## 副作用：暴露了引脚冲突
+
+自动加载把 DHT22 的 probe 提前到 rcS 阶段（5.58 s），比摄像头早，
+于是设备树里两个节点抢同一个引脚的矛盾第一次显形：
+
+```text
+[ 6.38] imx6ul-pinctrl: could not request pin 27 (MX6UL_PAD_GPIO1_IO04)
+        from group csi_pwn_rstgrp on device 20e0000.iomuxc
+[ 6.48] ov5640 1-003c: Error applying setting, reverse things back
+[ 7.01] ov5640 1-003c: setup pinctrl failed
+```
+
+反查 DTS：
+
+```dts
+ov5640@3c {
+    pwn-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;   /* 同一个脚 */
+    rst-gpios = <&gpio1 2 0>;
+    status = "okay";
+};
+```
+
+结论与后续方案写在仓库 README 第 9 节。当前选择：保持现状，
+摄像头节点不删，DHT22 继续占 GPIO1_IO04。
+
+## 这一节真正学到的东西
+
+```text
+1. 判断某个 GPIO 能不能用，只看 pinmux-pins 的 "MUX UNCLAIMED" 不够，
+   要去 DTS 里反查所有 *-gpios 引用（这个坑 01 里就埋下了，现在才炸）
+2. 手动 insmod 的顺序是"人决定的"，开机自动加载的顺序是内核决定的，
+   后者会把时序假设全部打出来
+```

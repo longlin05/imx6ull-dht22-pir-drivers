@@ -139,7 +139,37 @@ make -C drivers/pir_input  KDIR=/home/lin/imx6ull/linux-imx-rel_imx_4.1.15_2.1.0
 **没有设备树节点时会自动补一个 platform device**，老用法 `insmod dht22_iio.ko gpio_num=4`
 还能用。这条回退路径没有在板上实测（板子现在跑的就是带节点的 DTB）。
 
-## 9. 相关
+## 9. 已知问题：引脚和 LCD 模块撞了
+
+这块板子的 LCD 模块（4.3 寸屏 + 摄像头 + 触摸）把 GPIO1 占得很满，
+我们用的两个脚其实都有别的主人在设备树里：
+
+```text
+GPIO1_IO04  DHT22 DATA   ← 同时是 ov5640 的 pwn-gpios
+GPIO1_IO09  PIR OUT      ← 同时是触摸屏（edt-ft5x06 / goodix）的 IRQ
+```
+
+现状（2026-11-13）：
+
+```text
+驱动在 /etc/modules 里开机自动加载，所以 DHT22 比摄像头先 probe
+→ ov5640 开机会报 "could not request pin 27 ... setup pinctrl failed"
+→ 摄像头当前不可用（节点仍然是 status = "okay"，没删）
+PIR 能用，因为触摸屏本来 probe 就失败（板上没接触摸）
+```
+
+排查结论：GPIO1 这一组里**唯一的空脚是 GPIO1_IO01**（厂商 dht11/ds18b20
+示例节点占着，但没有驱动绑定）。如果要恢复摄像头，需要：
+
+```text
+1. 把 DHT22 DATA 从 GPIO_4 挪到 GPIO_1（动一根线）
+2. 设备树 data-gpios 改 <&gpio1 1 0>，pinctrl 改 0x60 0x2ec
+3. 摄像头节点不用动
+```
+
+暂时选择保持现状，这个冲突在 `docs/test-report-b-drivers.md` 里也有记录。
+
+## 10. 相关
 
 ```text
 STM32 + i.MX6ULL CAN 诊断与 OTA（项目 A）
