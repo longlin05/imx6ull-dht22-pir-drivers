@@ -54,10 +54,11 @@ PIR 模块没有滤波电容也没有下拉电阻，输出会自己抖；正文�
 ## 4. 路线图
 
 ```text
-01 设备树 + platform driver            ← 已完成，代码和实测都有
-02 IIO buffer / trigger                计划
-03 用 regmap / gpiod 把驱动写规范      计划
-04 Buildroot 集成，开机自动加载        计划
+01 设备树 + platform driver               已发布
+02 PIR 改 input 子系统                     已写，待发布
+   （原计划是 IIO buffer，摸底发现这颗内核没编 CONFIG_IIO_BUFFER）
+03 Buildroot 集成，开机自动加载            计划
+04 可选：DHT22 的 hwmon 兼容 / 错误计数     计划
 ```
 
 每篇的原则和前一个系列一样：**没跑过的数字不写，没测过的功能不说通过**。
@@ -68,6 +69,9 @@ PIR 模块没有滤波电容也没有下拉电阻，输出会自己抖；正文�
 01 把 insmod 的 gpio_num 换成设备树
    板子跑的是哪份 DTB / dtc 反编译重建 / pin 号怎么确定 / 刷入与回退 /
    driver 改造 / 三个 bug / 板上实测
+
+02 PIR 为什么不该做成字符设备
+   先查 config 否掉 IIO buffer / misc vs input / 事件成对 / 实测间隔与时长
 ```
 
 代码、设备树构建脚本和测试记录都在仓库里：

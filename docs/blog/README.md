@@ -38,10 +38,17 @@ B01 把 insmod 的 gpio_num 换成设备树
     https://blog.csdn.net/longlin101/article/details/170347113
 ```
 
+## 已写完待发布
+
+```text
+B02 PIR 为什么不该做成字符设备——换成 input 子系统
+    docs/blog/b02-pir-input-subsystem.md
+    配图 img/b02-misc-vs-input.png（发布时手动上传）
+```
+
 ## 待写
 
 ```text
-B02 IIO buffer / trigger
-B03 用 regmap / gpiod 把驱动写规范
-B04 Buildroot 集成，开机自动加载
+B03 Buildroot 集成，开机自动加载
+B04 可选：DHT22 的 hwmon 兼容 / 错误计数
 ```
