@@ -40,9 +40,16 @@ B02 PIR 为什么不该做成字符设备——换成 input 子系统
     https://blog.csdn.net/longlin101/article/details/170347113
 ```
 
+## 已写完待发布
+
+```text
+B03 从手动 insmod 到开机自动加载——以及它暴露的引脚冲突
+    docs/blog/b03-auto-load-and-pin-conflict.md
+    配图 img/b03-boot-timeline.png（发布时手动上传）
+```
+
 ## 待写
 
 ```text
-B03 Buildroot 集成，开机自动加载
 B04 可选：DHT22 的 hwmon 兼容 / 错误计数
 ```
