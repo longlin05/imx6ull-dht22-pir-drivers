@@ -14,7 +14,8 @@ drivers/pir_input    HC-SR501 人体红外，input 子系统设备（EV_KEY + �
 $ insmod dht22_iio.ko
 $ insmod pir_input.ko
 [ 2247.998787] dht22 dht22: probed, from device tree
-[ 2248.037562] pir pir: probed, irq=38, initial=1, from device tree
+[ 1538.409284] input: pir as /devices/platform/pir/input/input3
+[ 1538.436094] pir-input pir: probed, irq=38, key=148, from device tree
 ```
 
 ---
@@ -110,8 +111,8 @@ make -C drivers/pir_input  KDIR=/home/lin/imx6ull/linux-imx-rel_imx_4.1.15_2.1.0
 | probe 来源 | `from device tree`（不是 module parameter） |
 | pinctrl | `pin 27 (GPIO1_IO04): dht22 ... zl_dht22grp`、`pin 32 (GPIO1_IO09): pir ... zl_pirgrp` |
 | DHT22 | 19.6 °C / 50.5 %RH |
-| PIR read | 60 s 内 5 次事件 |
-| PIR poll | `select()` 挥手后 3 次事件，间隔 3.8 s / 6.7 s（holdoff 3 s） |
+| PIR 输入设备 | `Name="pir"`，`Handlers=kbd event2`，支持 `EV_KEY` / `KEY_PROG1(148)` |
+| PIR 事件 | evtest 抓到按下 → 1.04 s 后抬起（EV_KEY 148 value 1 / 0 + SYN_REPORT） |
 | rmmod/insmod | 2 轮循环无 warn / oops |
 
 原始输出见 [docs/test-report-b-drivers.md](docs/test-report-b-drivers.md)。
