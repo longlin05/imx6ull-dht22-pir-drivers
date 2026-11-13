@@ -1,4 +1,4 @@
-obj-m += pir_gpio.o
+obj-m += pir_input.o
 
 KDIR ?= /home/lin/imx6ull/linux-imx-rel_imx_4.1.15_2.1.0_ga
 ARCH ?= arm

@@ -4,7 +4,7 @@
 
 ```text
 drivers/dht22_iio   温湿度传感器，IIO 子系统
-drivers/pir_gpio    HC-SR501 人体红外，字符设备 /dev/pir + 中断 + poll
+drivers/pir_input    HC-SR501 人体红外，input 子系统设备（EV_KEY + 中断）
 ```
 
 两个驱动都是 **platform_driver + 设备树**：GPIO 由 DTS 的 `data-gpios` / `irq-gpios`
@@ -12,7 +12,7 @@ drivers/pir_gpio    HC-SR501 人体红外，字符设备 /dev/pir + 中断 + pol
 
 ```text
 $ insmod dht22_iio.ko
-$ insmod pir_gpio.ko
+$ insmod pir_input.ko
 [ 2247.998787] dht22 dht22: probed, from device tree
 [ 2248.037562] pir pir: probed, irq=38, initial=1, from device tree
 ```
@@ -42,7 +42,7 @@ HC-SR501 PIR
 
 ```text
 drivers/dht22_iio/     DHT22 IIO 驱动 + Makefile
-drivers/pir_gpio/      PIR 字符设备 + Makefile
+drivers/pir_input/      PIR input 设备 + Makefile
 dts/                   设备树改造：厂商 DTB、追加的节点片段、可复现的构建脚本
 test/                  板上测试脚本
 docs/                  调查记录与测试记录
@@ -85,7 +85,7 @@ dts/build.sh                                    反编译 → 追加 → 编译 
 source /opt/fsl-imx-x11/4.1.15-2.1.0/environment-setup-cortexa7hf-neon-poky-linux-gnueabi
 
 make -C drivers/dht22_iio KDIR=/home/lin/imx6ull/linux-imx-rel_imx_4.1.15_2.1.0_ga
-make -C drivers/pir_gpio  KDIR=/home/lin/imx6ull/linux-imx-rel_imx_4.1.15_2.1.0_ga
+make -C drivers/pir_input  KDIR=/home/lin/imx6ull/linux-imx-rel_imx_4.1.15_2.1.0_ga
 ```
 
 `.ko` 拷到板子后 `insmod`，**不需要任何参数**。
@@ -98,9 +98,9 @@ make -C drivers/pir_gpio  KDIR=/home/lin/imx6ull/linux-imx-rel_imx_4.1.15_2.1.0_
 /sys/bus/iio/devices/iio:device0/in_humidityrelative_input   湿度，0.001 %RH
 
 # PIR
-/dev/pir            read 阻塞到一次事件，返回当前电平
-                    poll 有事件时 POLLIN
-/sys/class/misc/pir/enable   1/0 开关，关掉时 read 返回 -EAGAIN
+/dev/input/eventX  EV_KEY / KEY_PROG1（可用 key_code 模块参数改）
+                    evtest /dev/input/eventX 直接看事件
+                    按下 = 检测到动作，抬起 = 电平回落
 ```
 
 ## 6. 实测（2026-11-09，板子上跑出来的）
