@@ -4,6 +4,7 @@
 > 上一篇：[01 把 `insmod` 的 gpio_num 换成设备树](https://blog.csdn.net/longlin101/article/details/170550878)
 > 代码：[imx6ull-dht22-pir-drivers](https://github.com/longlin05/imx6ull-dht22-pir-drivers)
 > 前置：[09 i.MX6ULL 驱动：DHT22 IIO + PIR 字符设备](https://blog.csdn.net/longlin101/article/details/170347113)
+> 已发布：https://blog.csdn.net/longlin101/article/details/170741777
 
 ---
 
